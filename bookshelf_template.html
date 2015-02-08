@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)http://www.teaching-materials.org/jsmvc/demo/bookshelf_mvc.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <title>My Bookshelf</title>
+  <style>
+body {
+  font-family: Arial, sans-serif;
+}
+
+#bookshelf {
+  background: url(http://www.teaching-materials.org/jsmvc/demo/bookshelf_bg.png);
+  width: 760px;
+  height: 570px;
+  padding-top: 90px;
+}
+
+.book {
+  height: 140px;
+  float: left;
+  margin: 0px 10px;
+}
+
+.book img {
+  height: 80px;
+}
+
+.book-review {
+  width: 200px;
+  background: #ffcc00;
+  border: #99000;
+  padding: 5px;
+}
+  </style>
+ </head>
+
+ <body><div id="bookshelf">
+ </div>
+
+<script type="text/javascript" src="http://teaching-materials.org/ajax/lib/jquery.min.js"></script>
+ <script>
+
+var booksJSON = [
+    {
+        "title": "You Better Not Cry: Stories for Christmas",
+        "author": "Burroughs, Augusten",
+        "date": "2011-12-08T13:00:00.000Z",
+        "asin": "B002U2DQAW",
+        "thumbnail": "http://images.amazon.com/images/P/B002U2DQAW.01.ZTZZZZZZ.jpg",
+        "rating": 3,
+        "include": "yes"
+    },
+    {
+        "title": "59 Seconds: Think a Little, Change a Lot",
+        "author": "Wiseman, Richard",
+        "date": "2011-11-26T13:00:00.000Z",
+        "asin": "B002W8QXHW",
+        "thumbnail": "http://images.amazon.com/images/P/B002W8QXHW.01.ZTZZZZZZ.jpg",
+        "review": "Science-based answers to the kind of stuff self-help books try to teach you (and fail).",
+        "rating": 5,
+        "include": "yes",
+        "tags": "motivation"
+    },
+    {
+        "title": "Amusing Ourselves to Death",
+        "author": "Postman, Neil",
+        "date": "2011-11-13T13:00:00.000Z",
+        "asin": "B0023ZLLH6",
+        "thumbnail": "http://images.amazon.com/images/P/B0023ZLLH6.01.ZTZZZZZZ.jpg",
+        "rating": 5,
+        "include": "yes"
+    },
+    {
+        "title": "Beware of the Dog",
+        "author": "Dahl, Roald",
+        "date": "2011-11-09T13:00:00.000Z",
+        "asin": "B003F24J3O",
+        "thumbnail": "http://images.amazon.com/images/P/B003F24J3O.01.ZTZZZZZZ.jpg",
+        "rating": 3,
+        "include": "yes"
+    },
+    {
+        "title": "Steve Jobs",
+        "author": "Isaacson, Walter",
+        "date": "2011-10-28T13:00:00.000Z",
+        "asin": "B004W2UBYW",
+        "thumbnail": "http://images.amazon.com/images/P/B004W2UBYW.01.ZTZZZZZZ.jpg",
+        "rating": 5,
+        "include": "yes"
+    },
+    {
+        "title": "Brain Bugs",
+        "author": "Buonomano, Dean",
+        "date": "2011-10-06T13:00:00.000Z",
+        "asin": "B0054LXX5O",
+        "thumbnail": "http://images.amazon.com/images/P/B0054LXX5O.01.ZTZZZZZZ.jpg",
+        "rating": 5,
+        "include": "yes",
+        "tags": "motivation"
+    },
+    {
+        "title": "Made to Stick",
+        "author": "Heath, Chip, and Heath, Dan",
+        "date": "2011-09-14T14:00:00.000Z",
+        "asin": "B000N2HCKQ",
+        "thumbnail": "http://images.amazon.com/images/P/B000N2HCKQ.01.ZTZZZZZZ.jpg",
+        "rating": 5,
+        "include": "yes",
+        "tags": "motivation"
+    },
+    {
+        "title": "The Most Human Human",
+        "author": "Christian, Brian",
+        "date": "2011-09-02T14:00:00.000Z",
+        "asin": "B004FEG2S6",
+        "thumbnail": "http://images.amazon.com/images/P/B004FEG2S6.01.ZTZZZZZZ.jpg",
+        "review": "Probably my favorite book of the year - covers computing, language, the soul, everything.",
+        "rating": 5,
+        "include": "yes"
+    },
+    {
+        "title": "Final Jeopardy",
+        "author": "Baker, Stephen",
+        "date": "2011-08-30T14:00:00.000Z",
+        "asin": "B004NNUXTI",
+        "thumbnail": "http://images.amazon.com/images/P/B004NNUXTI.01.ZTZZZZZZ.jpg",
+        "rating": 5,
+        "include": "yes"
+    },
+    {
+        "title": "Surely you're joking, Mr. Feynman",
+        "author": "Richard Feynman",
+        "date": "2012-01-31T13:00:00.000Z",
+        "asin": "B003V1WXKU",
+        "thumbnail": "http://images.amazon.com/images/P/B003V1WXKU.01.ZTZZZZZZ.jpg",
+        "review": "A bunch of short stories about Feynman's life - including stories of picking up girls and solving physics puzzles. Inspiring and entertaining.",
+        "rating": 5,
+        "include": "yes"
+    },
+    {
+        "title": "Born to Run",
+        "author": "McDougall, Christopher",
+        "date": "2011-08-26T14:00:00.000Z",
+        "asin": "B0028MBKVG",
+        "thumbnail": "http://images.amazon.com/images/P/B0028MBKVG.01.ZTZZZZZZ.jpg",
+        "rating": 5,
+        "include": "yes"
+    },
+    {
+        "title": "Little Earthquakes",
+        "author": "Jennifer Weiner",
+        "date": "2011-08-20T14:00:00.000Z",
+        "asin": "B000FC2952",
+        "thumbnail": "http://images.amazon.com/images/P/B000FC2952.01.ZTZZZZZZ.jpg",
+        "review": "A novel about a group of pregnant women and the obstacles they encounter in their first year after pregnancy. Good read..and re-inforced that I won't be baby-making anytime soon. :)",
+        "rating": 2,
+        "include": "yes"
+    },
+    {
+        "title": "The Diamond Age",
+        "author": "Neal Stephenson",
+        "date": "2011-08-02T14:00:00.000Z",
+        "asin": "0553380966",
+        "thumbnail": "http://images.amazon.com/images/P/0553380966.01.ZTZZZZZZ.jpg",
+        "review": "A sci-fi novel that follows a women from an abusive childhood to an epic adulthood -- I loved it because it reminds me of my favorite movie, Puff the Magic Dragon. Also makes interesting observations on how society is structured and what makes people intelligent.",
+        "rating": 5,
+        "include": "yes",
+        "tags": "code"
+    },
+    {
+        "title": "The Psychopath Test",
+        "author": "Jon Ronson",
+        "date": "2011-08-02T14:00:00.000Z",
+        "asin": "B004XFYWC0",
+        "thumbnail": "http://images.amazon.com/images/P/B004XFYWC0.01.ZTZZZZZZ.jpg",
+        "review": "An account of the author's investigation into what it means to be a psychopath, his interviews with actual psychopaths and the people who try to diagnose them. Really interesting to see the conclusions he reaches..makes you think.",
+        "rating": 5,
+        "include": "yes"
+    },
+];
+var BookModel = function(bookJSON) {
+    this.title = bookJSON.title || 'Untitled';
+    this.author = bookJSON.author || 'Unknown Author';
+    this.asin = bookJSON.asin;
+    this.thumbnail = bookJSON.thumbnail;
+    this.rating = bookJSON.rating;
+    this.review = bookJSON.review || '';
+    this.url = 'http://www.amazon.com/gp/product/' + this.asin + '?tag=amazonsimilar-30';
+};
+
+// var book = new BookModel({
+//     title: "1984",
+//     author: "George Orwell",
+//     asin: "0451524934",
+//     thumbnail: "http://images.amazon.com/images/P/0451524934.01.ZTZZZZZZ.jpg",
+//     rating: 4
+// });
+
+var BookCollection = function(booksJSON){
+    this.items = [];
+    for (var i = 0; i < booksJSON.length; i++) {
+        this.items.push(new BookModel(booksJSON[i]));
+    }
+};
+BookCollection.prototype.sort = function() {
+    this.items.sort(function(bookA, bookB) {
+    return(bookA.rating - bookB.rating);
+    });
+};
+
+var booksJSON = [{
+    title: "1984",
+    author: "George Orwell",
+    asin: "0451524934",
+    thumbnail: "http://images.amazon.com/images/P/0451524934.01.ZTZZZZZZ.jpg,",
+    rating: 4
+}]
+var books = new BookCollection(booksJSON);
+
+function BookShelfView(books) {
+  var shelfDiv = $('<div>');
+// this will make my view very pretty
+  return shelfDiv;
+}
+
+function fetchBooks() {
+    // In the real world we can do it in ajax
+	// Fetch and sort the data
+	// $.ajax({type: "GET",
+	//   url: "books.json",
+	//   dataType: "json",
+	//   success: function(booksJSON) {
+ //            var books = new BookCollection(booksJSON);
+ //            books.sort();
+ //            var shelf = new BookShelfView(books);
+ //            $('#bookshelf').append(shelf);
+	//  }
+	// });
+ // but since we are going to run this locally..let's just do this for now..
+  var books = new BookCollection(booksJSON);
+  books.sort();
+  var shelf = new BookShelfView(books);
+  $('#bookshelf').append(shelf);
+}
+
+$(document).ready(function() {
+	fetchBooks();
+});
+ </script>
+
+</body></html>
