@@ -1,3 +1,5 @@
+<!-- WARNING! Bit of a scope issue with 'book' in the JavaScript below - mouseover ratings and reviews do not render correctly, only render the last review and rating in the array. -->
+
 <!DOCTYPE html>
 <!-- saved from url=(0063)http://www.teaching-materials.org/jsmvc/demo/bookshelf_mvc.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
@@ -182,11 +184,13 @@ var BookModel = function(bookJSON) {
     this.author = bookJSON.author || 'Unknown Author';
     this.asin = bookJSON.asin;
     this.thumbnail = bookJSON.thumbnail;
-    this.rating = bookJSON.rating;
-    this.review = bookJSON.review || '';
+    this.rating = bookJSON.rating || 'No rating available';
+    this.review = bookJSON.review || 'No reveiw available';
     this.url = 'http://www.amazon.com/gp/product/' + this.asin + '?tag=amazonsimilar-30';
 };
 
+
+// FOR TESTING PURPOSES
 // var book = new BookModel({
 //     title: "1984",
 //     author: "George Orwell",
@@ -194,6 +198,14 @@ var BookModel = function(bookJSON) {
 //     thumbnail: "http://images.amazon.com/images/P/0451524934.01.ZTZZZZZZ.jpg",
 //     rating: 4
 // });
+
+// var booksJSON2 = [{
+//     title: "1984",
+//     author: "George Orwell",
+//     asin: "0451524934",
+//     thumbnail: "http://images.amazon.com/images/P/0451524934.01.ZTZZZZZZ.jpg,",
+//     rating: 4
+// }]
 
 var BookCollection = function(booksJSON){
     this.items = [];
@@ -207,20 +219,41 @@ BookCollection.prototype.sort = function() {
     });
 };
 
-var booksJSON = [{
-    title: "1984",
-    author: "George Orwell",
-    asin: "0451524934",
-    thumbnail: "http://images.amazon.com/images/P/0451524934.01.ZTZZZZZZ.jpg,",
-    rating: 4
-}]
 var books = new BookCollection(booksJSON);
 
-function BookShelfView(books) {
+var BookShelfView = function(books) {
   var shelfDiv = $('<div>');
-// this will make my view very pretty
+  for(var i = 0; i < books.items.length; i++) {
+    var book = books.items[i];
+    //create a div with a linked image inside it,
+    // and add that to the shelf div
+    var bookDiv = $('<div class = "book">');
+    var bookLink = $('<a>');
+    bookLink.attr('href', book.url);
+    var bookCover = $('<img>');
+    bookCover.attr('src', book.thumbnail);
+    bookLink.append(bookCover);
+    bookDiv.append(bookLink);
+    shelfDiv.append(bookDiv);
+
+    //on mouseover, pop up the review
+    bookDiv.bind('mouseover', function (e) {
+        var reviewDiv = $('<div class="book-review">');
+        reviewDiv.html('<strong>' + book.rating + ' stars: </strong>' + (book.review || ' No reveiw.'));
+        reviewDiv.css({'position': 'absolute', 'top': e.pageY, 'left': e.pageX});
+        $('body').append(reviewDiv);
+    // console.log(book.title);
+    // console.log(book.review);
+    
+    });
+
+    bookDiv.bind('mouseout', function() {
+        $('.book-review').remove();
+    });
+  }
+  // this will make my view very pretty
   return shelfDiv;
-}
+};
 
 function fetchBooks() {
     // In the real world we can do it in ajax
